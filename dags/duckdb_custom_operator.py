@@ -1,11 +1,12 @@
 from airflow.decorators import dag
 from pendulum import datetime
+from datetime import timedelta
 from include.custom_operators.postgres_to_duckdb_operator import PostgresToDuckDBOperator
 
 CONNECTION_DUCKDB = 'my_duckdb_conn'
 CONNECTION_POSTGRESDB = 'render_postgresdb_conn'
 
-@dag(start_date=datetime(2024, 8, 15), schedule=None, catchup=False)
+@dag(start_date=datetime(2024, 8, 15), schedule=timedelta(minutes=5), catchup=False)
 def pipeline_de_migracao_postgres_to_duckdb():
     PostgresToDuckDBOperator(
         task_id='postgres_to_duckdb',

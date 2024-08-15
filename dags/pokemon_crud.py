@@ -15,7 +15,7 @@ def pipeline_pokedex():
     def task_catch_pokemon(id):
         return catch_pokemon(id)
     
-    @task(task_id='add_pokemon_to_db')
+    @task(task_id='registrando_pokemon_database')
     def task_add_pokemon_to_db(pokemon_data):
         add_pokemon_to_db(pokemon_data)
         

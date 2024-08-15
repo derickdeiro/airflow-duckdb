@@ -24,16 +24,20 @@ class PostgresToDuckDBOperator(BaseOperator):
                             user={postgresql_conn.login}
                             port=5432
                             dbname={postgresql_conn.schema}
-                            password={postgresql_conn.password},
+                            password={postgresql_conn.password}',
                             '{self.postgres_schema}',
                             '{self.postgres_table_name}');
                             """)
         query = f"""
             INSERT INTO {self.postgres_table_name}
-            SELECT * FROM postgres_scan(
-                'host={postgresql_conn.host} user{postgresql_conn.login} port=5432 dbname={postgresql_conn.schema} password={postgresql_conn.password}',
+            SELECT * FROM postgres_scan('
+                host={postgresql_conn.host} 
+                user={postgresql_conn.login}
+                port=5432 
+                dbname={postgresql_conn.schema}
+                password={postgresql_conn.password}',
                 '{self.postgres_schema}',
-                '{self.postgres_table_name}',
+                '{self.postgres_table_name}')
                 WHERE created_at > (SELECT MAX(created_at) FROM {self.postgres_table_name});
             """
         duckdb_conn.execute(query)
